@@ -1,0 +1,277 @@
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 16
+Server version: 8.0.27 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.08 sec)
+
+mysql> create database address_book_service;
+Query OK, 1 row affected (1.25 sec)
+
+mysql> show databases;
++----------------------+
+| Database             |
++----------------------+
+| address_book_service |
+| information_schema   |
+| mysql                |
+| payroll_service      |
+| performance_schema   |
+| sakila               |
+| sys                  |
+| world                |
++----------------------+
+8 rows in set (0.18 sec)
+
+mysql> use address_book_service;
+Database changed
+mysql> select database();
++----------------------+
+| database()           |
++----------------------+
+| address_book_service |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> create table address_book
+    -> (
+    ->   first_name   varchar(150) not null,
+    ->   last_name    varchar(150) not null,
+    ->   address    varchar(150) not null,
+    ->   city    varchar(150) not null,
+    ->   state    varchar(150) not null,
+    ->   zip     int not null,
+    ->   phone_number   int not null,
+    ->   email   varchar(150) not null,
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 11
+mysql> create table address_book
+    -> (
+    ->    id int unsigned not null auto_increment,
+    ->    first_name   varchar(150) not null,
+    ->    last_name    varchar(150) not null,
+    ->    address    varchar(150) not null,
+    ->    city    varchar(150) not null,
+    ->    state    varchar(150) not null,
+    ->    zip     int not null,
+    ->    phone_number   int not null,
+    ->    email   varchar(150) not null,
+    ->    primary key (id)
+    -> );
+Query OK, 0 rows affected (4.07 sec)
+
+mysql> describe address_book;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id           | int unsigned | NO   | PRI | NULL    | auto_increment |
+| first_name   | varchar(150) | NO   |     | NULL    |                |
+| last_name    | varchar(150) | NO   |     | NULL    |                |
+| address      | varchar(150) | NO   |     | NULL    |                |
+| city         | varchar(150) | NO   |     | NULL    |                |
+| state        | varchar(150) | NO   |     | NULL    |                |
+| zip          | int          | NO   |     | NULL    |                |
+| phone_number | int          | NO   |     | NULL    |                |
+| email        | varchar(150) | NO   |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+9 rows in set (0.13 sec)
+
+mysql> select * from address_book;
+Empty set (0.19 sec)
+
+mysql> insert into address_book (first_name,last_name,address,city,state,zip,phone_number,email) values
+    ->     ('pranav','katkar','ring road','margao','goa',403601,2701406,'prnvkatkar88@gmail.com'),
+    ->     ('vikash','gupta','lemon road','patna','bihar',890789,2714511,'vikassguptaaa@gmail.com'),
+    ->     ('arnab','goswami','nehru nagar','vashi','maharashtra',500682,2255443,'arnabg@hotmail.com'),
+    ->     ('aryan','khan','mannat','juhu','maharashtra',500692,2704917,'khansrk@yahoo.com');
+Query OK, 4 rows affected (0.59 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from address_book;
++----+------------+-----------+-------------+--------+-------------+--------+--------------+-------------------------+
+| id | first_name | last_name | address     | city   | state       | zip    | phone_number | email                   |
++----+------------+-----------+-------------+--------+-------------+--------+--------------+-------------------------+
+|  1 | pranav     | katkar    | ring road   | margao | goa         | 403601 |      2701406 | prnvkatkar88@gmail.com  |
+|  2 | vikash     | gupta     | lemon road  | patna  | bihar       | 890789 |      2714511 | vikassguptaaa@gmail.com |
+|  3 | arnab      | goswami   | nehru nagar | vashi  | maharashtra | 500682 |      2255443 | arnabg@hotmail.com      |
+|  4 | aryan      | khan      | mannat      | juhu   | maharashtra | 500692 |      2704917 | khansrk@yahoo.com       |
++----+------------+-----------+-------------+--------+-------------+--------+--------------+-------------------------+
+4 rows in set (0.00 sec)
+
+mysql> update address_book set address ='mg road',state ='karnataka',zip=900812 where first_name = 'arnab';
+Query OK, 1 row affected (0.09 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from address_book;
++----+------------+-----------+------------+--------+-------------+--------+--------------+-------------------------+
+| id | first_name | last_name | address    | city   | state       | zip    | phone_number | email                   |
++----+------------+-----------+------------+--------+-------------+--------+--------------+-------------------------+
+|  1 | pranav     | katkar    | ring road  | margao | goa         | 403601 |      2701406 | prnvkatkar88@gmail.com  |
+|  2 | vikash     | gupta     | lemon road | patna  | bihar       | 890789 |      2714511 | vikassguptaaa@gmail.com |
+|  3 | arnab      | goswami   | mg road    | vashi  | karnataka   | 900812 |      2255443 | arnabg@hotmail.com      |
+|  4 | aryan      | khan      | mannat     | juhu   | maharashtra | 500692 |      2704917 | khansrk@yahoo.com       |
++----+------------+-----------+------------+--------+-------------+--------+--------------+-------------------------+
+4 rows in set (0.06 sec)
+
+mysql> delete from address_book where first_name = 'arnab';
+Query OK, 1 row affected (0.14 sec)
+
+mysql> select * from address_book;
++----+------------+-----------+------------+--------+-------------+--------+--------------+-------------------------+
+| id | first_name | last_name | address    | city   | state       | zip    | phone_number | email                   |
++----+------------+-----------+------------+--------+-------------+--------+--------------+-------------------------+
+|  1 | pranav     | katkar    | ring road  | margao | goa         | 403601 |      2701406 | prnvkatkar88@gmail.com  |
+|  2 | vikash     | gupta     | lemon road | patna  | bihar       | 890789 |      2714511 | vikassguptaaa@gmail.com |
+|  4 | aryan      | khan      | mannat     | juhu   | maharashtra | 500692 |      2704917 | khansrk@yahoo.com       |
++----+------------+-----------+------------+--------+-------------+--------+--------------+-------------------------+
+3 rows in set (0.05 sec)
+
+mysql> select * from address_book where city ='patna' or state ='bihar';
++----+------------+-----------+------------+-------+-------+--------+--------------+-------------------------+
+| id | first_name | last_name | address    | city  | state | zip    | phone_number | email                   |
++----+------------+-----------+------------+-------+-------+--------+--------------+-------------------------+
+|  2 | vikash     | gupta     | lemon road | patna | bihar | 890789 |      2714511 | vikassguptaaa@gmail.com |
++----+------------+-----------+------------+-------+-------+--------+--------------+-------------------------+
+1 row in set (0.05 sec)
+
+mysql> select count(city or state) from address_book;
++----------------------+
+| count(city or state) |
++----------------------+
+|                    3 |
++----------------------+
+1 row in set (0.37 sec)
+
+mysql> select * from address_book where city ='margao' order by first_name asc;
++----+------------+-----------+-----------+--------+-------+--------+--------------+------------------------+
+| id | first_name | last_name | address   | city   | state | zip    | phone_number | email                  |
++----+------------+-----------+-----------+--------+-------+--------+--------------+------------------------+
+|  1 | pranav     | katkar    | ring road | margao | goa   | 403601 |      2701406 | prnvkatkar88@gmail.com |
++----+------------+-----------+-----------+--------+-------+--------+--------------+------------------------+
+1 row in set (0.05 sec)
+
+mysql> alter table address_book add type varchar(150) after last_name;
+Query OK, 0 rows affected (2.83 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from address_book;
++----+------------+-----------+------+------------+--------+-------------+--------+--------------+-------------------------+
+| id | first_name | last_name | type | address    | city   | state       | zip    | phone_number | email                   |
++----+------------+-----------+------+------------+--------+-------------+--------+--------------+-------------------------+
+|  1 | pranav     | katkar    | NULL | ring road  | margao | goa         | 403601 |      2701406 | prnvkatkar88@gmail.com  |
+|  2 | vikash     | gupta     | NULL | lemon road | patna  | bihar       | 890789 |      2714511 | vikassguptaaa@gmail.com |
+|  4 | aryan      | khan      | NULL | mannat     | juhu   | maharashtra | 500692 |      2704917 | khansrk@yahoo.com       |
++----+------------+-----------+------+------------+--------+-------------+--------+--------------+-------------------------+
+3 rows in set (0.00 sec)
+
+mysql> update address_book set type ='family' where first_name ='pranav',set type = 'friend' where first_name = 'vikash',set type ='profession' where first_name = 'aryan';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',set type = 'friend' where first_name = 'vikash',set type ='profession' where fi' at line 1
+mysql> update address_book set type ='family' where first_name ='pranav';
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update address_book set type ='friend' where first_name ='vikash';
+Query OK, 1 row affected (0.16 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update address_book set type ='profession' where first_name ='aryan';
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from address_book;
++----+------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+| id | first_name | last_name | type       | address    | city   | state       | zip    | phone_number | email                   |
++----+------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+|  1 | pranav     | katkar    | family     | ring road  | margao | goa         | 403601 |      2701406 | prnvkatkar88@gmail.com  |
+|  2 | vikash     | gupta     | friend     | lemon road | patna  | bihar       | 890789 |      2714511 | vikassguptaaa@gmail.com |
+|  4 | aryan      | khan      | profession | mannat     | juhu   | maharashtra | 500692 |      2704917 | khansrk@yahoo.com       |
++----+------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+3 rows in set (0.00 sec)
+
+mysql> select count(type) group by type;
+ERROR 1054 (42S22): Unknown column 'type' in 'field list'
+mysql> select count(type) from address_book  group by type;
++-------------+
+| count(type) |
++-------------+
+|           1 |
+|           1 |
+|           1 |
++-------------+
+3 rows in set (0.00 sec)
+
+mysql> select type , count(type) from address_book  group by type;
++------------+-------------+
+| type       | count(type) |
++------------+-------------+
+| family     |           1 |
+| friend     |           1 |
+| profession |           1 |
++------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from address_book;
++----+------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+| id | first_name | last_name | type       | address    | city   | state       | zip    | phone_number | email                   |
++----+------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+|  1 | pranav     | katkar    | family     | ring road  | margao | goa         | 403601 |      2701406 | prnvkatkar88@gmail.com  |
+|  2 | vikash     | gupta     | friend     | lemon road | patna  | bihar       | 890789 |      2714511 | vikassguptaaa@gmail.com |
+|  4 | aryan      | khan      | profession | mannat     | juhu   | maharashtra | 500692 |      2704917 | khansrk@yahoo.com       |
++----+------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+3 rows in set (0.00 sec)
+
+mysql> alter table address_book drop id;
+Query OK, 3 rows affected (3.12 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from address_book;
++------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+| first_name | last_name | type       | address    | city   | state       | zip    | phone_number | email                   |
++------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+| pranav     | katkar    | family     | ring road  | margao | goa         | 403601 |      2701406 | prnvkatkar88@gmail.com  |
+| vikash     | gupta     | friend     | lemon road | patna  | bihar       | 890789 |      2714511 | vikassguptaaa@gmail.com |
+| aryan      | khan      | profession | mannat     | juhu   | maharashtra | 500692 |      2704917 | khansrk@yahoo.com       |
++------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into address_book (first_name,last_name,type,address,city,state,zip,phone_number,email)
+    ->    ('vikash,,'gupta','family','lemon road','patna','bihar',890789,2714511,'vikassguptaaa@gmail.com');
+    '> insert into address_book (first_name,last_name,type,address,city,state,zip,phone_number,email) values
+    '>    ('vikash,,'gupta','family','lemon road','patna','bihar',890789,2714511,'vikassguptaaa@gmail.com');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''vikash,,'gupta','family','lemon road','patna','bihar',890789,2714511,'vikassgup' at line 2
+mysql> insert into address_book (first_name,last_name,type,address,city,state,zip,phone_number,email) values
+    ->    ('vikash','gupta','family','lemon road','patna','bihar',890789,2714511,'vikassguptaaa@gmail.com');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select * from address_book;
++------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+| first_name | last_name | type       | address    | city   | state       | zip    | phone_number | email                   |
++------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+| pranav     | katkar    | family     | ring road  | margao | goa         | 403601 |      2701406 | prnvkatkar88@gmail.com  |
+| vikash     | gupta     | friend     | lemon road | patna  | bihar       | 890789 |      2714511 | vikassguptaaa@gmail.com |
+| aryan      | khan      | profession | mannat     | juhu   | maharashtra | 500692 |      2704917 | khansrk@yahoo.com       |
+| vikash     | gupta     | family     | lemon road | patna  | bihar       | 890789 |      2714511 | vikassguptaaa@gmail.com |
++------------+-----------+------------+------------+--------+-------------+--------+--------------+-------------------------+
+4 rows in set (0.05 sec)
+
+mysql>
